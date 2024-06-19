@@ -1,12 +1,117 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>TOP</title>
-  </head>
-  <body>
-    <h1>Hello, world!</h1>
-    <p>ようこそ、<%= username %> さん</p>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  <title>Top Page</title>
+  <style>
+    body {
+      font-family: 'Yu Gothic', '游ゴシック', YuGothic, 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    #editor {
+      font-size: 1rem;
+      width: 100%;
+      height: 400px;
+      margin-bottom: 20px;
+    }
+
+    #preview {
+      border: 1px solid #ccc;
+      padding: 20px;
+      font-size: 1rem;
+      height: 400px;
+      overflow-y: auto;
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background-color: #f8f9fa; /* ヘッダーの背景色 */
+      padding: 10px;
+      z-index: 1000; /* 他の要素より前面に表示 */
+      border-bottom: 1px solid #dee2e6; /* 下線 */
+      display: flex; /* フレックスコンテナにする */
+      justify-content: space-between; /* 左右に均等に配置 */
+    }
+
+    .header a {
+      color: black;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div style="font-weight: bold;margin:10px;">ようこそ、<%= username %> さん</div>
+    <a href="/logout" style="margin: 10px;">ログアウト</a>
+  </div>
+  <div class="container" style="padding-top: 50px;">
+    <div class="row mt-3" style="text-align: right;padding-bottom:20px;">
+      <div class="col">
+        <button onclick="previewMarkdown()" class="btn btn-secondary">プレビュー</button>
+        <button onclick="downloadPDF()" class="btn btn-secondary ml-2">PDFダウンロード</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6" style="padding-right: 0;">
+        <textarea id="editor" placeholder="マークダウン記法で記入してください"></textarea>
+      </div>
+      <div class="col-lg-6" style="padding-left: 0;">
+        <div id="preview"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function previewMarkdown() {
+      const markdown = document.getElementById('editor').value;
+      fetch('/preview', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ markdown: markdown }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('preview').innerHTML = data.html;
+        });
+    }
+
+    function downloadPDF() {
+      const markdown = document.getElementById('editor').value;
+      fetch('/pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ markdown: markdown }),
+      })
+        .then(response => response.blob())
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'document.pdf';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+        });
+    }
+  </script>
+</body>
+
 </html>
