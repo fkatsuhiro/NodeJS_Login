@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Register</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
 </head>
@@ -19,6 +19,10 @@
                     </div>
                     <div class="card-body">
                         <form action="/auth/register" method="POST">
+                            <div class="form-group">
+                                <label for="email">Name:</label>
+                                <input type="name" id="username" name="username" class="form-control" required>
+                            </div>
                             <div class="form-group">
                                 <label for="email">Email:</label>
                                 <input type="email" id="email" name="email" class="form-control" required>

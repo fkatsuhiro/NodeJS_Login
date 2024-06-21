@@ -33,9 +33,28 @@ app.post('/preview', (req, res) => {
     res.send({ html: htmlContent });
 });
 
+/*フォントの当て方に問題がある可能性が高い*/
+
 app.post('/pdf', async (req, res) => {
     const markdownContent = req.body.markdown;
-    const htmlContent = marked(markdownContent);
+    //const htmlContent = marked(markdownContent);
+    const htmlContent = `
+        <html>
+        <head>
+            <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+            <style>
+                body {
+                    font-family: 'Noto Sans JP', sans-serif;
+                    width: 80%, 
+                    margin: 0 auto;
+                }
+            </style>
+        </head>
+        <body>
+            ${marked(markdownContent)}
+        </body>
+        </html>
+    `
     const browser = await puppeteer.launch({
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });

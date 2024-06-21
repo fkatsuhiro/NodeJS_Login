@@ -7,10 +7,6 @@ const JWT = require("jsonwebtoken");
 const session = require("express-session");
 const MemoryStore = require("memorystore")(session);
 
-router.get("/", (req, res) => {
-    res.send("Hello Authjs");
-});
-
 // セッション設定
 router.use(session({
     secret: "SECRET_KEY",
@@ -21,6 +17,11 @@ router.use(session({
     })
 }));
 
+// ユーザー登録ページの表示
+router.get("/register", (req, res) => {
+    res.render("register");  // "register.ejs"をレンダリング
+});
+
 //ユーザー新規登録用の認証
 router.post(
     "/register",
@@ -28,6 +29,7 @@ router.post(
     body("email").isEmail(),
     body("password").isLength({ min: 6 }),
     async (req, res) => {
+        const username = req.body.username;
         const email = req.body.email;
         const password = req.body.password;
 
@@ -56,6 +58,13 @@ router.post(
             password: hashedPassword,
         })
 
+        // セッションにユーザー情報を保存する
+        req.session.username = user.username;
+        console.log(req.session.username);
+
+        // /top.ejsにリダイレクト
+        res.redirect("/auth/top");
+
         //JWTの発行クッキーなどに保存することが望ましい
         const token = await JWT.sign({
             email,
@@ -70,6 +79,8 @@ router.post(
         return res.json({
             token: token,
         });
+
+
     });
 
 //ログイン用のAPI
@@ -132,6 +143,20 @@ router.get("/top", (req, res) => {
     const username = req.session.username;
     // useremail をローカル変数として渡す
     res.render("top.ejs", { username });
+});
+
+// ログアウト用のAPI
+router.get("/logout", (req, res) => {
+    // セッションを破棄する
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({
+                message: "ログアウトに失敗しました。",
+            });
+        }
+        // ログインページにリダイレクト
+        res.redirect("/login");
+    });
 });
 
 //DBのユーザーを確認するためのAPI

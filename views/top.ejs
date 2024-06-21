@@ -22,15 +22,15 @@
     #editor {
       font-size: 1rem;
       width: 100%;
-      height: 400px;
-      margin-bottom: 20px;
+      height: 420px;
+      /*margin-bottom: 20px;*/
     }
 
     #preview {
       border: 1px solid #ccc;
-      padding: 20px;
+      /*padding: 20px;*/
       font-size: 1rem;
-      height: 400px;
+      height: 420px;
       overflow-y: auto;
     }
 
@@ -56,9 +56,9 @@
 <body>
   <div class="header">
     <div style="font-weight: bold;margin:10px;">ようこそ、<%= username %> さん</div>
-    <a href="/logout" style="margin: 10px;">ログアウト</a>
+    <a href="/auth/logout">ログアウト</a>
   </div>
-  <div class="container" style="padding-top: 50px;">
+  <div class="container" style="padding-top: 50px;margin-right: 0;">
     <div class="row mt-3" style="text-align: right;padding-bottom:20px;">
       <div class="col">
         <button onclick="previewMarkdown()" class="btn btn-secondary">プレビュー</button>
