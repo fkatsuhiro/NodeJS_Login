@@ -1,5 +1,9 @@
 # マークダウン記法文書PDF化アプリ
 
+## デモ動画
+[デモ動画](https://fkatsuhiro.github.io/MarkdownToPDF_Demo/)
+
+
 ## 機能実装目的
 普段LatexやWord等を用いて文書作成を行っている際にWordではPDF化できないものがあったり、Latexだと記述方法を覚えないといけないという点からもっと楽に使えるサービスはないかと思い作成に当たりました。
 
@@ -148,6 +152,3 @@
 ```
 
 少し手間ですが、この手順で環境構築を行ってもらえますと、ご利用いただけると思います。
-
-## デモ動画
-[デモ動画](https://fkatsuhiro.github.io/MarkdownToPDF_Demo/)
